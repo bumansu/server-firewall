@@ -89,6 +89,8 @@ function secure-ssh() {
       sed -i 's|X11Forwarding yes|X11Forwarding no|' /etc/ssh/sshd_config
       sed -i 's|#LogLevel INFO|LogLevel VERBOSE|' /etc/ssh/sshd_config
       sed -i 's|#Port 22|Port 22|' /etc/ssh/sshd_config
+      sed -i 's|#PubkeyAuthentication yes|PubkeyAuthentication yes|' /etc/ssh/sshd_config
+      sed -i 's|#ChallengeResponseAuthentication no|ChallengeResponseAuthentication yes|' /etc/ssh/sshd_config
     fi
     if pgrep systemd-journal; then
       systemctl enable sshd
