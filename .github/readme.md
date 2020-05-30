@@ -15,7 +15,7 @@
   <a href="https://raw.githubusercontent.com/complexorganizations/server-firewall/master/.github/LICENSE">
     <img alt="PullRequest" src="https://img.shields.io/github/issues-pr/complexorganizations/server-firewall" target="_blank" />
   </a>
-  <a href="https://raw.githubusercontent.com/complexorganizations/server-firewall/master/.github/LICENSE">
+  <a href="https://raw.githubusercontent.com/complexorganizations/server-firewall/master/.github/license">
     <img alt="License" src="https://img.shields.io/github/license/complexorganizations/server-firewall" target="_blank" />
   </a>
 </p>
