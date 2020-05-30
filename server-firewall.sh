@@ -38,4 +38,3 @@ function dist-check() {
 
 # Check Operating System
 dist-check
-
