@@ -43,15 +43,15 @@ dist-check
 function install-firewall() {
     if [ "$DISTRO" == "debian" ]; then
       apt-get update
-      apt-get install haveged fail2ban -y
+      apt-get install haveged fail2ban ufw -y
     fi
     if [ "$DISTRO" == "ubuntu" ]; then
       apt-get update
-      apt-get install haveged fail2ban -y
+      apt-get install haveged fail2ban ufw -y
     fi
     if [ "$DISTRO" == "raspbian" ]; then
       apt-get update
-      apt-get install haveged fail2ban -y
+      apt-get install haveged fail2ban ufw -y
     fi
     if [ "$DISTRO" == "arch" ]; then
       pacman -Syu
@@ -76,12 +76,17 @@ function install-firewall() {
       service fail2ban enable
       service fail2ban restart
     fi
+    if ! [ -x "$(command -v ufw)" ]; then
+      ufw enable
+      ufw default deny incoming
+      ufw default allow outgoing
+    fi
 }
 
 install-firewall
 
 function secure-ssh() {
-    if [ ! -f "/root/.ssh/authorized_keys" ]; then
+  if [ ! -f "/root/.ssh/authorized_keys" ]; then
       chmod 600 /root/.ssh && chmod 700 /root/.ssh/authorized_keys
       sed -i 's|#PasswordAuthentication yes|PasswordAuthentication no|' /etc/ssh/sshd_config
       sed -i 's|#PermitEmptyPasswords no|PermitEmptyPasswords no|' /etc/ssh/sshd_config
@@ -91,7 +96,6 @@ function secure-ssh() {
       sed -i 's|#Port 22|Port 22|' /etc/ssh/sshd_config
       sed -i 's|#PubkeyAuthentication yes|PubkeyAuthentication yes|' /etc/ssh/sshd_config
       sed -i 's|#ChallengeResponseAuthentication no|ChallengeResponseAuthentication yes|' /etc/ssh/sshd_config
-    fi
     if pgrep systemd-journal; then
       systemctl enable sshd
       systemctl restart sshd
@@ -99,21 +103,40 @@ function secure-ssh() {
       service ssh enable
       service ssh restart
     fi
+    if ! [ -x "$(command -v ufw)" ]; then
+      ufw allow 22/tcp
+    fi
+  fi
 }
 
 # Secure SSH
 secure-ssh
 
 function secure-nginx() {
-    if [ ! -f "/etc/nginx/nginx.conf" ]; then
+  if [ ! -f "/etc/nginx/nginx.conf" ]; then
       sed -i "s|# server_tokens off;|server_tokens off;|" /etc/nginx/nginx.conf
-    fi
     if pgrep systemd-journal; then
       systemctl restart nginx
     else
       service nginx restart
     fi
+    if ! [ -x "$(command -v ufw)" ]; then
+      ufw allow 80/tcp
+      ufw allow 443/tcp
+    fi
+  fi
 }
 
 # Secure Nginx
 secure-nginx
+
+function secure-wireguard() {
+  if [ ! -f "/etc/wireguard/wg0.conf" ]; then
+    if ! [ -x "$(command -v ufw)" ]; then
+      ufw allow 51820/udp
+    fi
+  fi
+}
+
+# Secure wireguard
+secure-wireguard
