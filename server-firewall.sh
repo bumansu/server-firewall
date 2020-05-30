@@ -158,3 +158,14 @@ function secure-apache() {
 
 # Secure Apache
 secure-apache
+
+function secure-dns() {
+  if [ ! -f "/etc/apache2/apache2.conf" ]; then
+    if ! [ -x "$(command -v ufw)" ]; then
+      ufw allow 53/tcp
+      ufw allow 53/udp
+    fi
+  fi
+}
+
+secure-dns
