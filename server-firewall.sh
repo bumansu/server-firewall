@@ -100,3 +100,20 @@ function secure-ssh() {
       service ssh restart
     fi
 }
+
+# Secure SSH
+secure-ssh
+
+function secure-nginx() {
+    if [ ! -f "/etc/nginx/nginx.conf" ]; then
+      sed -i "s|# server_tokens off;|server_tokens off;|" /etc/nginx/nginx.conf
+    fi
+    if pgrep systemd-journal; then
+      systemctl restart nginx
+    else
+      service nginx restart
+    fi
+}
+
+# Secure Nginx
+secure-nginx
