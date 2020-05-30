@@ -24,6 +24,11 @@ function check-system-requirements() {
     echo "Error: chmod is not installed, please install chmod." >&2
     exit
   fi
+  # System requirements (lsof)
+  if ! [ -x "$(command -v lsof)" ]; then
+    echo "Error: lsof is not installed, please install lsof." >&2
+    exit
+  fi
 }
 
 # Run the function and check for requirements
