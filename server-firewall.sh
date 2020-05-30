@@ -146,3 +146,15 @@ function secure-wireguard() {
 
 # Secure wireguard
 secure-wireguard
+
+function secure-apache() {
+  if [ ! -f "/etc/apache2/apache2.conf" ]; then
+    if ! [ -x "$(command -v ufw)" ]; then
+      ufw allow 80/tcp
+      ufw allow 443/tcp
+    fi
+  fi
+}
+
+# Secure Apache
+secure-apache
