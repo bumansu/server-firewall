@@ -89,6 +89,7 @@ function install-firewall() {
     fi
 }
 
+# install the basic firewall
 install-firewall
 
 function secure-ssh() {
@@ -136,6 +137,7 @@ function secure-nginx() {
 # Secure Nginx
 secure-nginx
 
+# Secure wireguard server
 function secure-wireguard() {
   if [ ! -f "/etc/wireguard/wg0.conf" ]; then
     if ! [ -x "$(command -v ufw)" ]; then
@@ -160,7 +162,8 @@ function secure-apache() {
 secure-apache
 
 function secure-dns() {
-  if [ ! -f "/etc/apache2/apache2.conf" ]; then
+  lsof -i :53 >&2
+  if [ $? -eq 1 ]; then
     if ! [ -x "$(command -v ufw)" ]; then
       ufw allow 53/tcp
       ufw allow 53/udp
@@ -168,4 +171,5 @@ function secure-dns() {
   fi
 }
 
+# TODO: Check if the port 53 is being used and if it is, use UFW and open TCP and UDP.
 secure-dns
