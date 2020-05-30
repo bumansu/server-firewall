@@ -14,9 +14,9 @@ super-user-check
 
 # Pre-Checks
 function check-system-requirements() {
-  # System requirements (jq)
-  if ! [ -x "$(command -v jq)" ]; then
-    echo "Error: jq is not installed, please install jq." >&2
+  # System requirements (sed)
+  if ! [ -x "$(command -v sed)" ]; then
+    echo "Error: sed is not installed, please install sed." >&2
     exit
   fi
 }
