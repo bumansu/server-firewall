@@ -82,6 +82,7 @@ function install-firewall() {
       service fail2ban restart
     fi
     if ! [ -x "$(command -v ufw)" ]; then
+      sed -i "s|# IPV6=yes;|IPV6=yes;|" /etc/default/ufw
       ufw enable
       ufw default deny incoming
       ufw default allow outgoing
