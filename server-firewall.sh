@@ -147,6 +147,7 @@ function secure-wireguard() {
   if [ ! -f "/etc/wireguard/wg0.conf" ]; then
     if ! [ -x "$(command -v ufw)" ]; then
       ufw allow 51820/udp
+      # Get the server's public ip from /etc/wireguard/wg0.conf [ListenPort = $SERVER_PORT]
     fi
   fi
 }
